@@ -56,6 +56,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'tradexa_project.urls'
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
