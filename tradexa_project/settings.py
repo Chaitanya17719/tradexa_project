@@ -25,8 +25,11 @@ SECRET_KEY = 'django-insecure--q8!gb)v3=na$t!mlbyoze)!+epoy5lkg-akm3+do47r)(@-^8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [
+    "tradexaproject.vercel.app",
+    "127.0.0.1",
+    "localhost",
+]
 
 # Application definition
 
