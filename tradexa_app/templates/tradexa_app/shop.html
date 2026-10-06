@@ -1,0 +1,275 @@
+{% extends "tradexa_app/base.html" %}
+{% load static %}
+
+{% block title %}Shop | Tradexa Warehouse{% endblock %}
+
+{% block breadcrumb %}
+<span>Tradexa</span>
+<span class="breadcrumb-separator">/</span>
+<strong>Shop</strong>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'tradexa_app/css/shop.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+        <h1 class="page-title">Product Shop</h1>
+
+        <p class="page-description">
+            Select products available in the warehouse.
+        </p>
+    </div>
+
+    <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+        Back to Dashboard
+    </a>
+
+</div>
+
+
+<div class="shop-toolbar">
+
+    <div class="search-box">
+
+        <span>⌕</span>
+
+        <input
+            type="search"
+            id="productSearch"
+            placeholder="Search products..."
+        >
+
+    </div>
+
+</div>
+
+
+<div class="shop-layout">
+
+
+<section>
+
+    <div class="section-heading">
+
+        <div>
+
+            <h2>Products</h2>
+
+            <span id="productCount">
+                {{ products|length }} products
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="product-grid" id="productGrid">
+
+        {% if products %}
+
+            {% for product in products %}
+
+                <div
+                    class="card product-card"
+                    data-product-name="{{ product.name|lower }}"
+                    data-product-sku="{{ product.sku|lower }}"
+                >
+
+                    <div class="product-card-header">
+
+                        <div>
+                            <h3>
+                                {{ product.name }}
+                            </h3>
+
+                            <span>
+                                SKU: {{ product.sku }}
+                            </span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="product-details">
+
+                        <div>
+                            <span>Dimensions</span>
+
+                            <strong>
+                                {{ product.length }}
+                                ×
+                                {{ product.width }}
+                                ×
+                                {{ product.height }} cm
+                            </strong>
+                        </div>
+
+
+                        <div>
+                            <span>Weight</span>
+
+                            <strong>
+                                {{ product.weight }} kg
+                            </strong>
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="btn btn-primary add-product"
+                        data-product-id="{{ product.id }}"
+                        data-product-name="{{ product.name }}"
+                        data-product-weight="{{ product.weight }}"
+                    >
+                        Add to Order
+                    </button>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="card product-empty">
+
+                <div class="empty-icon">□</div>
+
+                <h3>No products available</h3>
+
+                <p>
+                    No products have been added to the Django database yet.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+
+<aside class="cart-panel card">
+
+    <div class="cart-header">
+
+        <div>
+            <h2>Current order</h2>
+
+            <span id="cartCount">
+                0 items
+            </span>
+        </div>
+
+    </div>
+
+
+    <div class="cart-items" id="cartItems">
+
+        <div class="cart-empty">
+
+            <div class="empty-icon">⌂</div>
+
+            <h3>Your order is empty</h3>
+
+            <p>
+                Select products from the warehouse to build an order.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <form method="POST" id="orderForm">
+
+        {% csrf_token %}
+
+
+        <div class="order-form">
+
+            <div class="form-group">
+
+                <label for="customerName">
+                    Customer name
+                </label>
+
+                <input
+                    type="text"
+                    id="customerName"
+                    name="customer_name"
+                    placeholder="Enter customer name"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="customerAddress">
+                    Delivery address
+                </label>
+
+                <textarea
+                    id="customerAddress"
+                    name="address"
+                    placeholder="Enter delivery address"
+                    rows="3"
+                    required
+                ></textarea>
+
+            </div>
+
+        </div>
+
+
+        <div class="cart-footer">
+
+            <div class="cart-summary-row">
+
+                <span>
+                    Total weight
+                </span>
+
+                <strong id="cartWeight">
+                    0 kg
+                </strong>
+
+            </div>
+
+
+            <button
+                class="btn btn-primary cart-submit"
+                id="createOrder"
+                type="submit"
+                disabled
+            >
+                Create order
+            </button>
+
+        </div>
+
+    </form>
+
+</aside>
+
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script src="{% static 'tradexa_app/js/shop.js' %}"></script>
+
+{% endblock %}

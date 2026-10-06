@@ -1,0 +1,291 @@
+{% extends "tradexa_app/base.html" %}
+
+{% load static %}
+
+{% block title %}Packaging | Tradexa Warehouse{% endblock %}
+
+{% block breadcrumb %}
+
+<span>Tradexa</span>
+<span class="breadcrumb-separator">/</span>
+<strong>Packaging</strong>
+
+{% endblock %}
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'tradexa_app/css/packaging.css' %}"
+>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <h1 class="page-title">
+            Packaging
+        </h1>
+
+        <p class="page-description">
+            Find the best box combination for the selected order.
+        </p>
+
+    </div>
+
+    <a
+        href="{% url 'order_detail' %}"
+        class="btn btn-secondary"
+    >
+        Back to Orders
+    </a>
+
+</div>
+
+
+{% if order %}
+
+<div class="card">
+
+    <div class="section-heading">
+
+        <div>
+
+            <h2>
+                {{ order.order_number }}
+            </h2>
+
+            <span>
+                {{ order.customer_name }}
+            </span>
+
+        </div>
+
+        <span class="status-badge">
+            {{ order.status|title }}
+        </span>
+
+    </div>
+
+
+    <div class="order-information">
+
+        <div>
+
+            <span>Customer</span>
+
+            <strong>
+                {{ order.customer_name }}
+            </strong>
+
+        </div>
+
+
+        <div>
+
+            <span>Address</span>
+
+            <strong>
+                {{ order.address }}
+            </strong>
+
+        </div>
+
+
+        <div>
+
+            <span>Total Weight</span>
+
+            <strong>
+                {{ order_weight }} kg
+            </strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+{% if packages %}
+
+<div class="section-heading">
+
+    <div>
+
+        <h2>
+            Recommended Packages
+        </h2>
+
+        <span>
+            {{ packages|length }} package{{ packages|length|pluralize }} required
+        </span>
+
+    </div>
+
+</div>
+
+
+<div class="package-list">
+
+    {% for package in packages %}
+
+    <div class="card package-card">
+
+        <div class="package-header">
+
+            <div>
+
+                <h3>
+                    Package {{ forloop.counter }}
+                </h3>
+
+                <span>
+                    {{ package.box.name }}
+                </span>
+
+            </div>
+
+            <strong>
+                ₹{{ package.box.cost }}
+            </strong>
+
+        </div>
+
+
+        <div class="package-details">
+
+            <div>
+
+                <span>Box dimensions</span>
+
+                <strong>
+                    {{ package.box.length }}
+                    ×
+                    {{ package.box.width }}
+                    ×
+                    {{ package.box.height }} cm
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>Maximum weight</span>
+
+                <strong>
+                    {{ package.box.max_weight }} kg
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>Items</span>
+
+                <strong>
+                    {{ package.items|length }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="package-items">
+
+            <h4>
+                Products in this package
+            </h4>
+
+            {% for item in package.items %}
+
+            <div class="package-item">
+
+                <span>
+                    {{ item.product.name }}
+                </span>
+
+                <span>
+                    {{ item.product.weight }} kg
+                </span>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+
+<div class="page-actions">
+
+    <a
+        href="{% url 'package_qr' %}?order={{ order.order_number }}"
+        class="btn btn-primary"
+    >
+        Generate Package QR
+    </a>
+
+    <a
+        href="{% url 'order_detail' %}?order={{ order.order_number }}"
+        class="btn btn-secondary"
+    >
+        Back to Order
+    </a>
+
+</div>
+
+
+{% else %}
+
+<div class="card">
+
+    <h2>
+        No suitable packaging found
+    </h2>
+
+    <p>
+        The selected order cannot be packed using the available boxes.
+    </p>
+
+</div>
+
+{% endif %}
+
+
+{% else %}
+
+<div class="card">
+
+    <h2>
+        No order selected
+    </h2>
+
+    <p>
+        Please select an order before opening the packaging page.
+    </p>
+
+    <a
+        href="{% url 'order_detail' %}"
+        class="btn btn-primary"
+    >
+        View Orders
+    </a>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

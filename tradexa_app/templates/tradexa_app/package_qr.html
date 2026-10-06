@@ -1,0 +1,99 @@
+{% extends "tradexa_app/base.html" %}
+
+{% block title %}Package QR | Tradexa Warehouse{% endblock %}
+
+{% block breadcrumb %}
+
+<span>Tradexa</span>
+<span class="breadcrumb-separator">/</span>
+<strong>Package QR</strong>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+        <h1 class="page-title">Package QR</h1>
+
+        <p class="page-description">
+            QR code generated for the selected order.
+        </p>
+    </div>
+
+    <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+        Back to Dashboard
+    </a>
+
+</div>
+
+
+{% if order and qr_code %}
+
+<div class="card">
+
+    <div class="section-heading">
+
+        <div>
+
+            <h2>
+                {{ order.order_number }}
+            </h2>
+
+            <span>
+                Package information
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div>
+
+        <p>
+            <strong>Customer:</strong>
+            {{ order.customer_name }}
+        </p>
+
+        <p>
+            <strong>Address:</strong>
+            {{ order.address }}
+        </p>
+
+    </div>
+
+
+    <div style="text-align: center; margin-top: 30px;">
+
+        <img
+            src="data:image/png;base64,{{ qr_code }}"
+            alt="Package QR Code"
+            style="width: 250px; height: 250px;"
+        >
+
+        <p>
+            Scan this QR code to view the package information.
+        </p>
+
+    </div>
+
+</div>
+
+
+{% else %}
+
+<div class="card">
+
+    <h2>Order not found</h2>
+
+    <p>
+        Please select a valid order to generate a QR code.
+    </p>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

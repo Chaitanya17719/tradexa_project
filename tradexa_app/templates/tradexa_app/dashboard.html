@@ -1,0 +1,244 @@
+{% extends "tradexa_app/base.html" %}
+{% load static %}
+
+{% block title %}Dashboard | Tradexa Warehouse{% endblock %}
+
+{% block breadcrumb %}
+<span>Tradexa</span>
+<span class="breadcrumb-separator">/</span>
+<strong>Dashboard</strong>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'tradexa_app/css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+        <h1 class="page-title">Warehouse Dashboard</h1>
+
+        <p class="page-description">
+            Monitor orders, packaging operations and fulfillment activity.
+        </p>
+    </div>
+
+    <a href="{% url 'shop' %}" class="btn btn-primary">
+        View Products
+    </a>
+
+</div>
+
+
+<div class="stats-grid">
+
+    <div class="stat-card">
+        <div class="stat-label">Orders</div>
+
+        <div class="stat-value">
+            {{ total_orders }}
+        </div>
+
+        <div class="stat-description">
+            Total orders
+        </div>
+    </div>
+
+
+    <div class="stat-card">
+        <div class="stat-label">To Package</div>
+
+        <div class="stat-value">
+            {{ pending_orders }}
+        </div>
+
+        <div class="stat-description">
+            Pending orders
+        </div>
+    </div>
+
+
+    <div class="stat-card">
+        <div class="stat-label">Products</div>
+
+        <div class="stat-value">
+            {{ total_orders }}
+        </div>
+
+        <div class="stat-description">
+            Orders in system
+        </div>
+    </div>
+
+
+    <div class="stat-card">
+        <div class="stat-label">Avg. Weight</div>
+
+        <div class="stat-value">
+            {{ average_weight|floatformat:2 }}
+            kg
+        </div>
+
+        <div class="stat-description">
+            Average order weight
+        </div>
+    </div>
+
+</div>
+
+
+<div class="dashboard-grid">
+
+    <section class="card">
+
+        <div class="card-header">
+
+            <div>
+                <h2>Recent orders</h2>
+
+                <p>
+                    Latest orders received by the warehouse.
+                </p>
+            </div>
+
+            <a href="{% url 'shop' %}" class="text-link">
+                View products
+            </a>
+
+        </div>
+
+
+        {% if orders %}
+
+            <div class="dashboard-orders">
+
+                {% for order in orders %}
+
+                    <a
+                        href="{% url 'order_detail' %}?order={{ order.order_number }}"
+                        class="dashboard-order"
+                    >
+
+                        <div>
+                            <strong>
+                                {{ order.order_number }}
+                            </strong>
+
+                            <span>
+                                {{ order.customer_name }}
+                            </span>
+                        </div>
+
+
+                        <div>
+                            <span class="status-badge status-{{ order.status }}">
+                                {{ order.get_status_display }}
+                            </span>
+                        </div>
+
+                    </a>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="empty-state">
+
+                <div class="empty-icon">□</div>
+
+                <h3>No orders available</h3>
+
+                <p>
+                    Orders created in Django will appear here.
+                </p>
+
+                <a href="{% url 'shop' %}" class="btn btn-primary">
+                    View Products
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <section class="card">
+
+        <div class="card-header">
+
+            <div>
+                <h2>Warehouse activity</h2>
+
+                <p>
+                    Current fulfillment status.
+                </p>
+            </div>
+
+        </div>
+
+
+        {% if orders %}
+
+            <div class="activity-list">
+
+                {% for order in orders|slice:":4" %}
+
+                    <div class="activity-item">
+
+                        <div class="activity-icon">
+                            {% if order.status == "pending" %}
+                                !
+                            {% elif order.status == "packing" %}
+                                ▣
+                            {% elif order.status == "ready" %}
+                                ✓
+                            {% else %}
+                                →
+                            {% endif %}
+                        </div>
+
+
+                        <div class="activity-content">
+
+                            <strong>
+                                {{ order.order_number }}
+                            </strong>
+
+                            <span>
+                                {{ order.get_status_display }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="empty-state">
+
+                <div class="empty-icon">▣</div>
+
+                <h3>No activity yet</h3>
+
+                <p>
+                    Warehouse activity will appear when orders are available.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+</div>
+
+{% endblock %}

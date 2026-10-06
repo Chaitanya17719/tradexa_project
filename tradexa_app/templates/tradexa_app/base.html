@@ -1,0 +1,265 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}
+            Tradexa Warehouse
+        {% endblock %}
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'tradexa_app/css/base.css' %}"
+    >
+
+    {% block extra_css %}
+    {% endblock %}
+
+</head>
+
+
+<body>
+
+<div class="app-shell">
+
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-mark">
+                T
+            </div>
+
+            <div>
+
+                <div class="brand-name">
+                    Tradexa
+                </div>
+
+                <div class="brand-subtitle">
+                    Warehouse OS
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <div class="nav-section-title">
+                WORKSPACE
+            </div>
+
+
+            <a
+                href="{% url 'dashboard' %}"
+                class="nav-item"
+            >
+
+                <span class="nav-icon">
+                    ▦
+                </span>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <a
+                href="{% url 'shop' %}"
+                class="nav-item"
+            >
+
+                <span class="nav-icon">
+                    ⌂
+                </span>
+
+                <span>
+                    Products
+                </span>
+
+            </a>
+
+
+            <div class="nav-section-title">
+                FULFILLMENT
+            </div>
+
+
+            <a
+                href="{% url 'order_detail' %}"
+                class="nav-item"
+            >
+
+                <span class="nav-icon">
+                    □
+                </span>
+
+                <span>
+                    Orders
+                </span>
+
+            </a>
+
+
+            <a
+                href="{% url 'packaging' %}"
+                class="nav-item"
+            >
+
+                <span class="nav-icon">
+                    ▣
+                </span>
+
+                <span>
+                    Packaging
+                </span>
+
+            </a>
+
+
+            <a
+                href="{% url 'package_qr' %}"
+                class="nav-item"
+            >
+
+                <span class="nav-icon">
+                    ⌗
+                </span>
+
+                <span>
+                    Package QR
+                </span>
+
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-footer">
+
+            <div class="system-status">
+
+                <span class="status-dot"></span>
+
+                <div>
+
+                    <strong>
+                        System ready
+                    </strong>
+
+                    <small>
+                        Django warehouse system
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main-content">
+
+
+        <header class="topbar">
+
+            <button
+                class="mobile-menu"
+                id="mobileMenu"
+                type="button"
+                aria-label="Open navigation"
+            >
+                ☰
+            </button>
+
+
+            <div class="breadcrumb">
+
+                {% block breadcrumb %}
+
+                    <span>
+                        Tradexa
+                    </span>
+
+                    <span class="breadcrumb-separator">
+                        /
+                    </span>
+
+                    <strong>
+                        Workspace
+                    </strong>
+
+                {% endblock %}
+
+            </div>
+
+
+            <div class="topbar-actions">
+
+                <div class="user-profile">
+
+                    <div class="avatar">
+                        W
+                    </div>
+
+                    <div class="user-info">
+
+                        <strong>
+                            Warehouse
+                        </strong>
+
+                        <span>
+                            Operator
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <div class="page-container">
+
+            {% block content %}
+            {% endblock %}
+
+        </div>
+
+
+    </main>
+
+</div>
+
+
+<script src="{% static 'tradexa_app/js/base.js' %}"></script>
+
+
+{% block extra_js %}
+{% endblock %}
+
+
+</body>
+
+</html>

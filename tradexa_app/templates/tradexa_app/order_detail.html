@@ -1,0 +1,275 @@
+{% extends "tradexa_app/base.html" %}
+{% load static %}
+
+{% block title %}Order Details | Tradexa Warehouse{% endblock %}
+
+{% block breadcrumb %}
+<span>Tradexa</span>
+<span class="breadcrumb-separator">/</span>
+<strong>Order Details</strong>
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+        <h1 class="page-title">Order details</h1>
+        <p class="page-description">
+            Review customer, product and shipment information.
+        </p>
+    </div>
+
+    {% if order %}
+        <a
+            href="{% url 'packaging' %}?order={{ order.order_number }}"
+            class="btn btn-primary"
+        >
+            Proceed to Packaging
+        </a>
+    {% endif %}
+
+</div>
+
+
+<div class="order-layout">
+
+    <section>
+
+        <div class="card order-card">
+
+            <div class="card-header">
+
+                <div>
+                    <h2>Order information</h2>
+                    <p>
+                        Information supplied by the ecommerce system.
+                    </p>
+                </div>
+
+                {% if order %}
+                    <span class="status-badge status-{{ order.status }}">
+                        {{ order.get_status_display }}
+                    </span>
+                {% endif %}
+
+            </div>
+
+
+            {% if order %}
+
+                <div class="order-information">
+
+                    <div class="order-info-row">
+                        <span>Order number</span>
+                        <strong>{{ order.order_number }}</strong>
+                    </div>
+
+                    <div class="order-info-row">
+                        <span>Customer</span>
+                        <strong>{{ order.customer_name }}</strong>
+                    </div>
+
+                    <div class="order-info-row">
+                        <span>Address</span>
+                        <strong>{{ order.address|linebreaksbr }}</strong>
+                    </div>
+
+                    <div class="order-info-row">
+                        <span>Created</span>
+                        <strong>{{ order.created_at|date:"d M Y, H:i" }}</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="order-products">
+
+                    <div class="section-heading">
+                        <h3>Products</h3>
+                        <p>
+                            Products included in this order.
+                        </p>
+                    </div>
+
+
+                    {% for item in order.items.all %}
+
+                        <div class="order-product">
+
+                            <div class="product-information">
+
+                                <strong>
+                                    {{ item.product.name }}
+                                </strong>
+
+                                <span>
+                                    SKU: {{ item.product.sku }}
+                                </span>
+
+                            </div>
+
+
+                            <div class="product-details">
+
+                                <span>
+                                    {{ item.product.length }}
+                                    ×
+                                    {{ item.product.width }}
+                                    ×
+                                    {{ item.product.height }} cm
+                                </span>
+
+                                <span>
+                                    {{ item.product.weight }} kg
+                                </span>
+
+                                <strong>
+                                    ×{{ item.qty }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    {% empty %}
+
+                        <div class="order-empty">
+                            <div class="empty-icon">□</div>
+
+                            <h3>No products</h3>
+
+                            <p>
+                                This order does not contain any products.
+                            </p>
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+            {% else %}
+
+                <div class="order-empty">
+
+                    <div class="empty-icon">□</div>
+
+                    <h3>No order selected</h3>
+
+                    <p>
+                        Select an order from the warehouse queue to view
+                        customer and product information.
+                    </p>
+
+                    <a href="{% url 'shop' %}" class="btn btn-primary">
+                        View Orders
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+    <aside>
+
+        <div class="card summary-card">
+
+            <div class="summary-header">
+                <h2>Shipment summary</h2>
+            </div>
+
+
+            {% if order %}
+
+                <div class="summary-row">
+                    <span>Items</span>
+
+                    <strong>
+                        {{ order.items.count }}
+                    </strong>
+                </div>
+
+
+                <div class="summary-row">
+                    <span>Total weight</span>
+
+                    <strong>
+                        {{ total_weight }} kg
+                    </strong>
+                </div>
+
+
+                <div class="summary-row">
+                    <span>Dimensions</span>
+
+                    <strong>
+                        See products
+                    </strong>
+                </div>
+
+
+                <div class="summary-row">
+                    <span>Packages</span>
+
+                    <strong>
+                        —
+                    </strong>
+                </div>
+
+            {% else %}
+
+                <div class="summary-row">
+                    <span>Items</span>
+                    <strong>—</strong>
+                </div>
+
+                <div class="summary-row">
+                    <span>Total weight</span>
+                    <strong>—</strong>
+                </div>
+
+                <div class="summary-row">
+                    <span>Dimensions</span>
+                    <strong>—</strong>
+                </div>
+
+                <div class="summary-row">
+                    <span>Packages</span>
+                    <strong>—</strong>
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        {% if order %}
+
+            <div class="card customer-card">
+
+                <div class="summary-header">
+                    <h2>Customer</h2>
+                </div>
+
+                <p class="customer-name">
+                    {{ order.customer_name }}
+                </p>
+
+                <p class="customer-address">
+                    {{ order.address|linebreaksbr }}
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </aside>
+
+</div>
+
+{% endblock %}
